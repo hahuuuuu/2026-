@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新春乐事 · 2026马年</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+'red-500': '#E11D48',
+'red-600': '#BE123C',
+'gold-400': '#FACC15',
+'gold-500': '#EAB308',
+'cream-50': '#FFFBEB',
+'cream-100': '#FEF3C7',
+},
+fontFamily: {
+'serif': ['"Noto Serif SC"', 'serif'],
+'art': ['"ZCOOL XiaoWei"', 'serif'],
+},
+animation: {
+'float': 'float 6s ease-in-out infinite',
+'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+'spin-slow': 'spin 8s linear infinite',
+},
+keyframes: {
+float: {
+'0%, 100%': { transform: 'translateY(0)' },
+'50%': { transform: 'translateY(-20px)' },
+}
+}
+}
+}
+}
+</script>
+
+<style>
+body {
+font-family: 'Noto Serif SC', serif;
+background-color: #8B0000;
+overflow-x: hidden;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+width: 8px;
+}
+::-webkit-scrollbar-track {
+background: #7f1d1d;
+}
+::-webkit-scrollbar-thumb {
+background: #fbbf24;
+border-radius: 4px;
+}
+
+/* 玻璃拟态卡片 */
+.glass-card {
+background: rgba(255, 255, 255, 0.85);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+border: 1px solid rgba(255, 255, 255, 0.3);
+box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* 红色玻璃拟态 */
+.glass-red {
+background: rgba(190, 18, 60, 0.7);
+backdrop-filter: blur(8px);
+-webkit-backdrop-filter: blur(8px);
+border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 装饰性背景纹理 */
+.bg-pattern {
+background-image: 
+radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.1) 0%, transparent 50%),
+url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23fbbf24' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* 灯笼动画 */
+.lantern {
+animation: swing 3s ease-in-out infinite alternate;
+transform-origin: top center;
+}
+@keyframes swing {
+from { transform: rotate(-5deg); }
+to { transform: rotate(5deg); }
+}
+
+/* 烟花画布 */
+#fireworks-canvas {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+pointer-events: none;
+z-index: 50;
+}
+
+/* 星空弹幕画布 */
+#starfield-canvas {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+pointer-events: none;
+z-index: 0; /* 在最底层 */
+}
+
+/* 音乐播放器按钮样式 */
+.music-btn {
+width: 50px;
+height: 50px;
+position: fixed;
+bottom: 30px;
+right: 30px;
+z-index: 100;
+border-radius: 50%;
+background: rgba(255, 255, 255, 0.2);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 215, 0, 0.5);
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: all 0.3s ease;
+box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.music-btn:hover {
+transform: scale(1.1);
+background: rgba(255, 255, 255, 0.3);
+}
+.music-playing {
+animation: spin-slow 4s linear infinite;
+border-color: #fbbf24;
+box-shadow: 0 0 15px #fbbf24;
+}
+.music-icon {
+font-size: 24px;
+color: #fbbf24;
+}
+
+/* 上传区域样式 */
+.upload-area {
+border: 2px dashed #fca5a5;
+transition: all 0.3s;
+}
+.upload-area:hover {
+border-color: #ef4444;
+background-color: #fef2f2;
+}
+</style>
+</head>
+<body class="bg-pattern min-h-screen text-gray-800 relative selection:bg-red-200 selection:text-red-900">
+
+<!-- 星空弹幕画布 (背景层) -->
+<canvas id="starfield-canvas"></canvas>
+
+<!-- 背景音乐 -->
+<audio id="bg-music" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_246635f52a.mp3?filename=chinese-new-year-126536.mp3" type="audio/mpeg">
+    您的浏览器不支持音频元素。
+</audio>
+
+<!-- 音乐控制按钮 -->
+<div id="music-control" class="music-btn" onclick="toggleMusic()">
+    <i id="music-icon" class="fa-solid fa-compact-disc music-icon"></i>
+</div>
+
+<!-- 烟花画布 (前景交互层) -->
+<canvas id="fireworks-canvas"></canvas>
+
+<!-- 背景装饰灯笼 -->
+<div class="fixed top-0 left-4 md:left-20 z-0 opacity-80 pointer-events-none hidden md:block">
+    <div class="lantern relative w-16 h-20 bg-red-600 rounded-full border-4 border-yellow-400 flex items-center justify-center shadow-lg">
+        <div class="w-2 h-2 bg-yellow-300 rounded-full animate-pulse"></div>
+        <div class="absolute -bottom-6 w-1 h-6 bg-yellow-400"></div>
+        <div class="absolute -bottom-8 w-8 h-2 bg-yellow-400 rounded"></div>
+    </div>
+</div>
+<div class="fixed top-0 right-4 md:right-20 z-0 opacity-80 pointer-events-none hidden md:block" style="animation-delay: 1.5s;">
+    <div class="lantern relative w-16 h-20 bg-red-600 rounded-full border-4 border-yellow-400 flex items-center justify-center shadow-lg">
+        <div class="w-2 h-2 bg-yellow-300 rounded-full animate-pulse"></div>
+        <div class="absolute -bottom-6 w-1 h-6 bg-yellow-400"></div>
+        <div class="absolute -bottom-8 w-8 h-2 bg-yellow-400 rounded"></div>
+    </div>
+</div>
+
+<!-- 导航栏 -->
+<nav class="fixed w-full z-40 transition-all duration-300 py-4" id="navbar">
+    <div class="container mx-auto px-6 flex justify-between items-center">
+        <div class="text-2xl font-art font-bold text-white drop-shadow-md flex items-center gap-2">
+            <i class="fa-solid fa-horse text-gold-400"></i>
+            <span>岁岁年年</span>
+        </div>
+        <div class="hidden md:flex space-x-8 text-white/90 font-medium">
+            <a href="#hero" class="hover:text-gold-400 transition-colors">首页</a>
+            <a href="#moments" class="hover:text-gold-400 transition-colors">精彩瞬间</a>
+            <a href="#upload-section" class="hover:text-gold-400 transition-colors">上传分享</a>
+            <a href="#wishes" class="hover:text-gold-400 transition-colors">新年寄语</a>
+        </div>
+        <button class="md:hidden text-white text-2xl" onclick="toggleMobileMenu()">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </div>
+    <!-- 移动端菜单 -->
+    <div id="mobile-menu" class="hidden absolute top-full left-0 w-full glass-red md:hidden p-4 flex-col gap-4 text-center text-white shadow-xl">
+        <a href="#hero" class="block py-2 hover:text-gold-400">首页</a>
+        <a href="#moments" class="block py-2 hover:text-gold-400">精彩瞬间</a>
+        <a href="#upload-section" class="block py-2 hover:text-gold-400">上传分享</a>
+        <a href="#wishes" class="block py-2 hover:text-gold-400">新年寄语</a>
+    </div>
+</nav>
+
+<!-- Hero 区域 -->
+<section id="hero" class="relative pt-32 pb-20 px-4 min-h-screen flex items-center justify-center">
+    <div class="container mx-auto text-center relative z-10">
+        <!-- 装饰圆环 -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[500px] md:h-[500px] border border-gold-400/30 rounded-full animate-pulse-slow"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] md:w-[520px] md:h-[520px] border border-dashed border-gold-400/20 rounded-full animate-[spin_20s_linear_infinite]"></div>
+
+        <div class="glass-card p-8 md:p-12 rounded-3xl max-w-3xl mx-auto transform hover:scale-[1.01] transition-transform duration-500">
+            <div class="inline-block px-4 py-1 bg-red-100 text-red-600 rounded-full text-sm font-bold mb-6 tracking-widest border border-red-200">
+                2026 · 丙午马年
+            </div>
+            <h1 class="text-4xl md:text-6xl font-art font-bold text-gray-900 mb-6 leading-tight">
+                新春快乐，<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-400">马到成功</span>
+            </h1>
+            <p class="text-gray-600 text-lg md:text-xl mb-8 leading-relaxed font-serif">
+                马蹄声声辞旧岁，瑞气盈门迎新春。<br>
+                愿你的祝福如繁星，点亮整个夜空。
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <button onclick="scrollToSection('moments')" class="px-8 py-3 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white rounded-full shadow-lg shadow-red-500/30 transition-all transform hover:-translate-y-1 font-bold flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-camera"></i> 查看瞬间
+                </button>
+                <button onclick="launchSingleFirework()" class="px-8 py-3 bg-white text-red-600 border border-red-100 hover:bg-red-50 rounded-full shadow-sm transition-all font-bold flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> 点燃文字烟花
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 上传分享区域 -->
+<section id="upload-section" class="py-20 px-4 bg-white/50">
+    <div class="container mx-auto max-w-4xl">
+        <div class="glass-card rounded-3xl p-8 md:p-12 relative overflow-hidden">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-2 bg-gradient-to-r from-transparent via-red-500 to-transparent"></div>
+            
+            <h2 class="text-3xl font-art font-bold text-gray-900 mb-2 text-center">分享你的年味</h2>
+            <p class="text-center text-gray-500 mb-8">上传照片或写下祝福，需经过内容审核后方可展示</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- 图片上传 -->
+                <div class="flex flex-col gap-4">
+                    <h3 class="font-bold text-lg text-red-700 flex items-center gap-2">
+                        <i class="fa-solid fa-image"></i> 上传年味照片
+                    </h3>
+                    <div class="upload-area rounded-2xl p-8 text-center cursor-pointer relative bg-white/40" onclick="document.getElementById('fileInput').click()">
+                        <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="handleFileSelect(this)">
+                        <div id="upload-placeholder" class="space-y-2">
+                            <i class="fa-solid fa-cloud-arrow-up text-4xl text-red-300"></i>
+                            <p class="text-gray-500 text-sm">点击上传图片 (JPG, PNG)</p>
+                        </div>
+                        <img id="preview-img" class="hidden max-h-48 mx-auto rounded-lg shadow-md object-cover" />
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="img-desc" placeholder="图片描述（选填）" class="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:border-red-500 focus:outline-none text-sm">
+                        <button onclick="submitImage()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-bold">
+                            提交审核
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 祝福语上传 -->
+                <div class="flex flex-col gap-4">
+                    <h3 class="font-bold text-lg text-red-700 flex items-center gap-2">
+                        <i class="fa-solid fa-pen-nib"></i> 撰写新年祝福
+                    </h3>
+                    <div class="bg-white/40 rounded-2xl p-4 h-full flex flex-col">
+                        <textarea id="wish-text" class="flex-1 w-full bg-transparent border-none resize-none focus:ring-0 text-gray-700 placeholder-gray-400" placeholder="写下你的祝福语，例如：祝大家马年行大运...（你的祝福将化作夜空中的星星！）"></textarea>
+                        <div class="flex justify-between items-center mt-4">
+                            <span class="text-xs text-gray-400">请文明用语，内容将进行审核</span>
+                            <button onclick="submitWish()" class="px-6 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors text-sm font-bold shadow-md">
+                                提交审核
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 精彩瞬间 (展示区) -->
+<section id="moments" class="py-20 px-4 bg-white/30">
+    <div class="container mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-art font-bold text-gray-900 mb-4">人间烟火气</h2>
+            <div class="w-24 h-1 bg-red-500 mx-auto rounded-full"></div>
+            <p class="mt-4 text-gray-600">收集生活中的小确幸，拼凑出年的味道</p>
+        </div>
+
+        <div id="moments-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- 卡片 1 (预置) -->
+            <div class="group relative h-80 rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-300">
+                <div class="absolute inset-0 bg-gradient-to-br from-orange-400 to-red-600 transition-transform duration-700 group-hover:scale-110"></div>
+                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/80 to-transparent text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    <div class="flex items-center gap-2 mb-2 text-gold-400 text-sm">
+                        <i class="fa-solid fa-utensils"></i> <span>除夕夜</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-1">团圆年夜饭</h3>
+                    <p class="text-sm text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                        一桌丰盛的菜肴，是家人团聚最温暖的注脚。
+                    </p>
+                </div>
+                <div class="absolute top-4 right-4 text-white/80 text-4xl opacity-50 group-hover:opacity-100 group-hover:rotate-12 transition-all duration-500">
+                    <i class="fa-solid fa-bowl-rice"></i>
+                </div>
+            </div>
+            <!-- 卡片 2 (预置) -->
+            <div class="group relative h-80 rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-300">
+                <div class="absolute inset-0 bg-gradient-to-bl from-red-500 to-pink-600 transition-transform duration-700 group-hover:scale-110"></div>
+                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/80 to-transparent text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    <div class="flex items-center gap-2 mb-2 text-gold-400 text-sm">
+                        <i class="fa-solid fa-gifts"></i> <span>拜年</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-1">红包与祝福</h3>
+                    <p class="text-sm text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                        小孩儿们的欢笑，和那一抹鲜艳的中国红。
+                    </p>
+                </div>
+                <div class="absolute top-4 right-4 text-white/80 text-4xl opacity-50 group-hover:opacity-100 group-hover:rotate-12 transition-all duration-500">
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                </div>
+            </div>
+            <!-- 卡片 3 (预置) -->
+            <div class="group relative h-80 rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-300">
+                <div class="absolute inset-0 bg-gradient-to-tr from-amber-500 to-yellow-400 transition-transform duration-700 group-hover:scale-110"></div>
+                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/80 to-transparent text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    <div class="flex items-center gap-2 mb-2 text-red-200 text-sm">
+                        <i class="fa-solid fa-fire-burner"></i> <span>习俗</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-1">张灯结彩</h3>
+                    <p class="text-sm text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                        街头巷尾挂起的灯笼，照亮了归家的路。
+                    </p>
+                </div>
+                <div class="absolute top-4 right-4 text-white/80 text-4xl opacity-50 group-hover:opacity-100 group-hover:rotate-12 transition-all duration-500">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 互动许愿墙 -->
+<section id="wishes" class="py-20 px-4 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-full bg-red-900/10 -z-10"></div>
+    <div class="container mx-auto max-w-4xl">
+        <div class="glass-card rounded-3xl p-8 md:p-12 text-center relative overflow-hidden">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-2 bg-gradient-to-r from-transparent via-red-500 to-transparent"></div>
+            <h2 class="text-3xl font-art font-bold text-gray-900 mb-2">新年许愿墙</h2>
+            <p class="text-gray-500 mb-8">审核通过的祝福将在这里展示，并化作夜空中的星星</p>
+            <div id="wishes-container" class="flex flex-wrap justify-center gap-4 min-h-[200px]">
+                <!-- 预置许愿签 -->
+                <div class="wish-tag px-4 py-2 bg-red-100 text-red-700 rounded-lg border border-red-200 text-sm font-serif shadow-sm animate-float" style="animation-delay: 0s;">
+                    马到成功
+                </div>
+                <div class="wish-tag px-4 py-2 bg-gold-100 text-yellow-700 rounded-lg border border-yellow-200 text-sm font-serif shadow-sm animate-float" style="animation-delay: 1s;">
+                    龙马精神
+                </div>
+                <div class="wish-tag px-4 py-2 bg-pink-100 text-pink-700 rounded-lg border border-pink-200 text-sm font-serif shadow-sm animate-float" style="animation-delay: 2s;">
+                    一马当先
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 页脚 -->
+<footer class="bg-gray-900 text-white py-12 text-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
+    <div class="container mx-auto relative z-10">
+        <div class="text-4xl text-gold-400 mb-4 font-art">马年大吉</div>
+        <p class="text-gray-400 mb-6">Designed with <i class="fa-solid fa-heart text-red-500 animate-pulse"></i> for the New Year</p>
+        <div class="flex justify-center gap-6 text-2xl">
+            <a href="#" class="hover:text-gold-400 transition-colors"><i class="fa-brands fa-weixin"></i></a>
+            <a href="#" class="hover:text-gold-400 transition-colors"><i class="fa-brands fa-weibo"></i></a>
+            <a href="#" class="hover:text-gold-400 transition-colors"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+        <div class="mt-8 text-sm text-gray-600">
+            &copy; 2026 New Year Life Share. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<!-- 通知 Toast -->
+<div id="toast" class="fixed top-24 left-1/2 transform -translate-x-1/2 bg-white px-6 py-3 rounded-full shadow-2xl z-[60] flex items-center gap-3 transition-all duration-300 opacity-0 translate-y-[-20px] pointer-events-none">
+    <i id="toast-icon" class="fa-solid fa-circle-check text-green-500 text-xl"></i>
+    <span id="toast-message" class="font-medium text-gray-800">操作成功</span>
+</div>
+
+<script>
+// -------------------------
+// 审核系统逻辑 (模拟)
+// -------------------------
+const sensitiveWords = ['坏蛋', '笨蛋', '死', '暴力', '垃圾', '滚']; // 模拟敏感词库
+
+function moderateContent(text) {
+    if (!text || text.trim().length === 0) {
+        return { passed: false, message: '内容不能为空' };
+    }
+    if (text.length < 2) {
+        return { passed: false, message: '内容太短啦，多写几个字吧' };
+    }
+    
+    // 检查敏感词
+    for (let word of sensitiveWords) {
+        if (text.includes(word)) {
+            return { passed: false, message: `内容包含不当词汇 "${word}"，无法通过审核` };
+        }
+    }
+    
+    return { passed: true };
+}
+
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toast-message');
+    const toastIcon = document.getElementById('toast-icon');
+    
+    toastMsg.innerText = message;
+    
+    if (type === 'success') {
+        toastIcon.className = 'fa-solid fa-circle-check text-green-500 text-xl';
+    } else {
+        toastIcon.className = 'fa-solid fa-circle-xmark text-red-500 text-xl';
+    }
+    
+    toast.classList.remove('opacity-0', 'translate-y-[-20px]');
+    
+    setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-[-20px]');
+    }, 3000);
+}
+
+// -------------------------
+// 上传与展示逻辑
+// -------------------------
+let selectedImage = null;
+
+// 图片预览
+function handleFileSelect(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            selectedImage = e.target.result;
+            const preview = document.getElementById('preview-img');
+            const placeholder = document.getElementById('upload-placeholder');
+            
+            preview.src = selectedImage;
+            preview.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// 提交图片
+function submitImage() {
+    const desc = document.getElementById('img-desc').value;
+    
+    if (!selectedImage) {
+        showToast('请先选择一张图片', 'error');
+        return;
+    }
+    
+    // 模拟审核描述
+    const check = moderateContent(desc);
+    if (!check.passed) {
+        showToast(check.message, 'error');
+        return;
+    }
+    
+    // 审核通过，添加到展示区
+    addMomentCard(selectedImage, desc || '分享美好瞬间');
+    showToast('图片上传成功，审核通过！');
+    
+    // 重置表单
+    document.getElementById('fileInput').value = '';
+    document.getElementById('img-desc').value = '';
+    document.getElementById('preview-img').classList.add('hidden');
+    document.getElementById('upload-placeholder').classList.remove('hidden');
+    selectedImage = null;
+}
+
+// 提交祝福语
+function submitWish() {
+    const text = document.getElementById('wish-text').value;
+    
+    const check = moderateContent(text);
+    if (!check.passed) {
+        showToast(check.message, 'error');
+        return;
+    }
+    
+    // 审核通过，添加到许愿墙
+    addWishTag(text);
+    showToast('祝福语发布成功！已化作夜空中的星星！');
+    
+    // 重置表单
+    document.getElementById('wish-text').value = '';
+}
+
+// 动态添加图片卡片
+function addMomentCard(imgSrc, desc) {
+    const container = document.getElementById('moments-grid');
+    const card = document.createElement('div');
+    
+    // 随机生成一个渐变背景作为备用，如果图片加载慢
+    const randomHue = Math.floor(Math.random() * 360);
+    
+    card.className = "group relative h-80 rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-300 animate-float";
+    card.innerHTML = `
+        <img src="${imgSrc}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="${desc}">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
+        <div class="absolute bottom-0 left-0 w-full p-6 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+            <div class="flex items-center gap-2 mb-2 text-gold-400 text-sm">
+                <i class="fa-solid fa-user"></i> <span>用户分享</span>
+            </div>
+            <h3 class="text-xl font-bold mb-1 truncate">${desc}</h3>
+        </div>
+    `;
+    
+    // 插入到最前面
+    container.insertBefore(card, container.firstChild);
+}
+
+// 动态添加许愿签
+function addWishTag(text) {
+    const container = document.getElementById('wishes-container');
+    const tag = document.createElement('div');
+    
+    const colors = [
+        'bg-red-100 text-red-700 border-red-200',
+        'bg-gold-100 text-yellow-700 border-yellow-200',
+        'bg-pink-100 text-pink-700 border-pink-200',
+        'bg-orange-100 text-orange-700 border-orange-200'
+    ];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    
+    tag.className = `wish-tag px-4 py-2 ${randomColor} rounded-lg border text-sm font-serif shadow-sm animate-float cursor-default hover:scale-110 transition-transform`;
+    tag.innerText = text;
+    tag.style.animationDelay = Math.random() * 2 + 's';
+    
+    container.appendChild(tag);
+    
+    // 动画反馈
+    tag.animate([
+        { transform: 'scale(0.5)', opacity: 0 },
+        { transform: 'scale(1.2)', opacity: 1 },
+        { transform: 'scale(1)', opacity: 1 }
+    ], {
+        duration: 400,
+        easing: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+    });
+}
+
+// -------------------------
+// 其他功能 (音乐、烟花等)
+// -------------------------
+
+const bgMusic = document.getElementById('bg-music');
+const musicControl = document.getElementById('music-control');
+const musicIcon = document.getElementById('music-icon');
+let isPlaying = false;
+
+function toggleMusic() {
+    if (isPlaying) {
+        bgMusic.pause();
+        musicControl.classList.remove('music-playing');
+        musicIcon.classList.remove('fa-compact-disc');
+        musicIcon.classList.add('fa-play');
+    } else {
+        bgMusic.play().then(() => {
+            musicControl.classList.add('music-playing');
+            musicIcon.classList.remove('fa-play');
+            musicIcon.classList.add('fa-compact-disc');
+        }).catch(error => {
+            console.log("Autoplay prevented, waiting for user interaction");
+        });
+    }
+    isPlaying = !isPlaying;
+}
+
+window.addEventListener('load', () => {
+    bgMusic.volume = 0.5;
+    document.body.addEventListener('click', function musicInBrowser() {
+        if(!isPlaying) {
+            toggleMusic();
+            document.body.removeEventListener('click', musicInBrowser);
+        }
+    }, { once: true });
+});
+
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('hidden');
+    menu.classList.toggle('flex');
+}
+
+function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('mobile-menu').classList.add('hidden');
+    document.getElementById('mobile-menu').classList.remove('flex');
+}
+
+window.addEventListener('scroll', () => {
+    const navbar = document.getElementById('navbar');
+    if (window.scrollY > 50) {
+        navbar.classList.add('glass-red', 'shadow-lg');
+        navbar.classList.remove('py-4');
+        navbar.classList.add('py-2');
+    } else {
+        navbar.classList.remove('glass-red', 'shadow-lg');
+        navbar.classList.remove('py-2');
+        navbar.classList.add('py-4');
+    }
+});
+
+// -------------------------
+// 星空弹幕特效 (背景层)
+// -------------------------
+const starCanvas = document.getElementById('starfield-canvas');
+const starCtx = starCanvas.getContext('2d');
+let stars = [];
+
+function resizeStarCanvas() {
+    starCanvas.width = window.innerWidth;
+    starCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeStarCanvas);
+resizeStarCanvas();
+
+// 获取所有祝福语
+function getAllWishes() {
+    const tags = document.querySelectorAll('.wish-tag');
+    const wishes = [];
+    tags.forEach(tag => {
+        wishes.push(tag.innerText);
+    });
+    // 如果没有祝福语，提供默认值
+    if (wishes.length === 0) {
+        return ['新年快乐', '万事如意', '马到成功'];
+    }
+    return wishes;
+}
+
+class Star {
+    constructor() {
+        this.reset();
+        // 初始位置随机分布
+        this.y = Math.random() * starCanvas.height;
+    }
+
+    reset() {
+        this.x = Math.random() * starCanvas.width;
+        this.y = starCanvas.height + 10; // 从底部下方开始
+        this.size = Math.random() * 2 + 1; // 大小
+        this.speed = Math.random() * 0.5 + 0.1; // 上升速度
+        this.opacity = 0;
+        this.fadeState = 'in'; // in, hold, out
+        this.fadeSpeed = Math.random() * 0.01 + 0.005;
+        this.maxOpacity = Math.random() * 0.5 + 0.3;
+        
+        // 随机决定是否携带文字
+        this.hasText = Math.random() < 0.4; // 40% 概率携带文字
+        if (this.hasText) {
+            const wishes = getAllWishes();
+            this.text = wishes[Math.floor(Math.random() * wishes.length)];
+            this.fontSize = Math.floor(Math.random() * 10) + 12; // 12-22px
+        }
+    }
+
+    update() {
+        this.y -= this.speed;
+
+        // 闪烁逻辑
+        if (this.fadeState === 'in') {
+            this.opacity += this.fadeSpeed;
+            if (this.opacity >= this.maxOpacity) {
+                this.opacity = this.maxOpacity;
+                this.fadeState = 'hold';
+                // 随机停留时间
+                this.holdTime = Math.random() * 100 + 50;
+            }
+        } else if (this.fadeState === 'hold') {
+            this.holdTime--;
+            if (this.holdTime <= 0) {
+                this.fadeState = 'out';
+            }
+        } else if (this.fadeState === 'out') {
+            this.opacity -= this.fadeSpeed;
+            if (this.opacity <= 0) {
+                this.reset();
+            }
+        }
+
+        // 如果飞出顶部，重置
+        if (this.y < -50) {
+            this.reset();
+        }
+    }
+
+    draw() {
+        starCtx.beginPath();
+        starCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        starCtx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+        starCtx.fill();
+
+        // 绘制文字
+        if (this.hasText && this.text) {
+            starCtx.save();
+            starCtx.translate(this.x, this.y - 10); // 文字在星星上方
+            starCtx.fillStyle = `rgba(255, 255, 255, ${this.opacity * 0.8})`; // 文字稍微淡一点
+            starCtx.font = `${this.fontSize}px "Noto Serif SC"`;
+            starCtx.textAlign = 'center';
+            starCtx.shadowColor = "rgba(0,0,0,0.5)";
+            starCtx.shadowBlur = 4;
+            starCtx.fillText(this.text, 0, 0);
+            starCtx.restore();
+        }
+    }
+}
+
+function initStars() {
+    stars = [];
+    const starCount = Math.floor(window.innerWidth / 15); // 根据屏幕宽度决定星星数量
+    for (let i = 0; i < starCount; i++) {
+        stars.push(new Star());
+    }
+}
+
+function animateStars() {
+    starCtx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+    stars.forEach(star => {
+        star.update();
+        star.draw();
+    });
+    requestAnimationFrame(animateStars);
+}
+
+// -------------------------
+// 前景烟花特效 (保留文字版)
+// -------------------------
+const canvas = document.getElementById('fireworks-canvas');
+const ctx = canvas.getContext('2d');
+let fireworks = [];
+let particles = [];
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function random(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+class Firework {
+    constructor(sx, sy, tx, ty) {
+        this.x = sx;
+        this.y = sy;
+        this.sx = sx;
+        this.sy = sy;
+        this.tx = tx;
+        this.ty = ty;
+        this.distanceToTarget = Math.sqrt(Math.pow(tx - sx, 2) + Math.pow(ty - sy, 2));
+        this.distanceTraveled = 0;
+        this.coordinates = [];
+        this.coordinateCount = 3;
+        while (this.coordinateCount--) {
+            this.coordinates.push([this.x, this.y]);
+        }
+        this.angle = Math.atan2(ty - sy, tx - sx);
+        this.speed = 2;
+        this.acceleration = 1.05;
+        this.brightness = random(50, 70);
+        this.targetRadius = 1;
+    }
+
+    update(index) {
+        this.coordinates.pop();
+        this.coordinates.unshift([this.x, this.y]);
+        if (this.targetRadius < 8) {
+            this.targetRadius += 0.3;
+        } else {
+            this.targetRadius = 1;
+        }
+        this.speed *= this.acceleration;
+        const vx = Math.cos(this.angle) * this.speed;
+        const vy = Math.sin(this.angle) * this.speed;
+        this.distanceTraveled = Math.sqrt(Math.pow(this.sx - this.x, 2) + Math.pow(this.sy - this.y, 2));
+        if (this.distanceTraveled >= this.distanceToTarget) {
+            createParticles(this.tx, this.ty);
+            fireworks.splice(index, 1);
+        } else {
+            this.x += vx;
+            this.y += vy;
+        }
+    }
+
+    draw() {
+        ctx.beginPath();
+        ctx.moveTo(this.coordinates[this.coordinates.length - 1][0], this.coordinates[this.coordinates.length - 1][1]);
+        ctx.lineTo(this.x, this.y);
+        ctx.strokeStyle = 'hsl(' + random(0, 360) + ', 100%, ' + this.brightness + '%)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(this.tx, this.ty, this.targetRadius, 0, Math.PI * 2);
+        ctx.stroke();
+    }
+}
+
+class Particle {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.coordinates = [];
+        this.coordinateCount = 5;
+        while (this.coordinateCount--) {
+            this.coordinates.push([this.x, this.y]);
+        }
+        this.angle = random(0, Math.PI * 2);
+        this.speed = random(1, 10);
+        this.friction = 0.95;
+        this.gravity = 1;
+        this.hue = random(0, 360);
+        this.brightness = random(50, 80);
+        this.alpha = 1;
+        this.decay = random(0.015, 0.03);
+        
+        // 随机决定这个粒子是否携带文字
+        this.hasText = Math.random() < 0.3; 
+        if (this.hasText) {
+            const wishes = getAllWishes();
+            this.text = wishes[Math.floor(Math.random() * wishes.length)];
+            this.fontSize = random(14, 24); 
+        }
+    }
+
+    update(index) {
+        this.coordinates.pop();
+        this.coordinates.unshift([this.x, this.y]);
+        this.speed *= this.friction;
+        this.x += Math.cos(this.angle) * this.speed;
+        this.y += Math.sin(this.angle) * this.speed + this.gravity;
+        this.alpha -= this.decay;
+        if (this.alpha <= this.decay) {
+            particles.splice(index, 1);
+        }
+    }
+
+    draw() {
+        ctx.beginPath();
+        ctx.moveTo(this.coordinates[this.coordinates.length - 1][0], this.coordinates[this.coordinates.length - 1][1]);
+        ctx.lineTo(this.x, this.y);
+        ctx.strokeStyle = 'hsla(' + this.hue + ', 100%, ' + this.brightness + '%, ' + this.alpha + ')';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        if (this.hasText && this.text) {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            ctx.fillStyle = `hsla(${this.hue}, 100%, 90%, ${this.alpha})`;
+            ctx.shadowColor = `hsla(${this.hue}, 100%, 50%, ${this.alpha})`;
+            ctx.shadowBlur = 10;
+            ctx.font = `bold ${this.fontSize}px "Noto Serif SC"`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(this.text, 0, 0);
+            ctx.restore();
+        }
+    }
+}
+
+function createParticles(x, y) {
+    let particleCount = 80;
+    while (particleCount--) {
+        particles.push(new Particle(x, y));
+    }
+}
+
+function loop() {
+    requestAnimationFrame(loop);
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = 'lighter';
+    let i = fireworks.length;
+    while (i--) {
+        fireworks[i].draw();
+        fireworks[i].update(i);
+    }
+    let j = particles.length;
+    while (j--) {
+        particles[j].draw();
+        particles[j].update(j);
+    }
+}
+
+function launchSingleFirework() {
+    const targetX = random(canvas.width * 0.1, canvas.width * 0.9);
+    const targetY = random(canvas.height * 0.1, canvas.height * 0.5);
+    fireworks.push(new Firework(canvas.width / 2, canvas.height, targetX, targetY));
+}
+
+canvas.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    fireworks.push(new Firework(canvas.width / 2, canvas.height, e.clientX, e.clientY));
+});
+
+window.onload = function() {
+    initStars();
+    animateStars();
+    loop();
+};
+</script>
+
+</body>
+</html>
